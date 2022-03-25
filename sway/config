@@ -1,0 +1,165 @@
+# Variables
+set $mod Mod4
+set $term alacritty
+set $menu exec $term --title launcher -e ~/.config/sway/sway-launcher-desktop.sh
+
+## workspaces
+set $ws1   1
+set $ws2   2
+set $ws3   3
+set $ws4   4
+set $ws5   5
+set $ws6   6
+set $ws7   7
+set $ws8   8
+set $ws9   9
+set $ws0   10
+
+# Output and Wallpaper
+output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output DP-1 mode 3840x2160@144.000Hz pos 0 0
+output DP-2 mode 3840x2160@144.000Hz pos 3840 0
+
+
+# Layout
+font segoeui:Sans 14
+default_border pixel 1
+default_floating_border normal
+hide_edge_borders both
+smart_gaps on
+smart_borders on
+gaps inner 10
+gaps outer 10
+
+## Specific applications
+### Make application launcher fit the vibe
+for_window [title="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10
+for_window [title="^btop$"] floating enable, sticky enable, resize set 60 ppt 60 ppt, border pixel 10
+
+# Autostart
+exec noisetorch
+exec spotify
+exec Discord
+
+# Default workspaces
+assign [title="^Discord$"] $ws7
+assign [title="^NoiseTorch$"] $ws8
+assign [title="Steam"] $ws9
+for_window [title="Spotify"] move window to workspace $ws0
+
+# Shortcuts
+bindsym $mod+Return exec $term
+## Screenshot
+bindsym $mod+grave exec grim -g "$(slurp -d)" - | wl-copy
+## Kill focused window
+bindsym $mod+q kill
+## Start your launcher
+bindsym $mod+d exec $menu
+## Window manipulation with mouse
+floating_modifier $mod inverse
+
+## Reload and Restart
+bindsym $mod+Shift+c reload
+
+## Exit sway (logs you out of your Wayland session)
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+## Workspace switching
+bindsym $mod+1   workspace $ws1
+bindsym $mod+2   workspace $ws2
+bindsym $mod+3   workspace $ws3
+bindsym $mod+4   workspace $ws4
+bindsym $mod+5   workspace $ws5
+bindsym $mod+6   workspace $ws6
+bindsym $mod+7   workspace $ws7
+bindsym $mod+8   workspace $ws8
+bindsym $mod+9   workspace $ws9
+bindsym $mod+0   workspace $ws0
+
+# Moving around
+
+## Change Focus
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+## Move focused window
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+## Move focused container to workspace
+bindsym $mod+Shift+1    move container to workspace $ws1
+bindsym $mod+Shift+2    move container to workspace $ws2
+bindsym $mod+Shift+3    move container to workspace $ws3
+bindsym $mod+Shift+4    move container to workspace $ws4
+bindsym $mod+Shift+5    move container to workspace $ws5
+bindsym $mod+Shift+6    move container to workspace $ws6
+bindsym $mod+Shift+7    move container to workspace $ws7
+bindsym $mod+Shift+8    move container to workspace $ws8
+bindsym $mod+Shift+9    move container to workspace $ws9
+bindsym $mod+Shift+0    move container to workspace $ws0
+
+## Move workspaces between outputs
+bindsym $mod+Control+Shift+Right move workspace to output right
+bindsym $mod+Control+Shift+Left move workspace to output left
+
+## Layout shortcuts
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+f fullscreen
+### Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
+### Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
+### Move focus to the parent container
+bindsym $mod+a focus parent
+
+## Scratchpad shortcuts
+### Move the currently focused window to the scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+### Show the next scratchpad window or hide the focused scratchpad window.
+### If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+minus scratchpad show
+
+# Special Modes
+
+## Resize mode
+mode "resize" {
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+
+# Status bar
+bar {
+    swaybar_command waybar
+    position top
+
+#     # When the status_command prints a new line to stdout, swaybar updates.
+#     # The default just shows the current date and time.
+    # status_command while date +'%Y-%m-%d %I:%M:%S %p'; do sleep 1; done
+
+    # colors {
+    #    statusline #ffffff
+    #    background #323232
+    #    inactive_workspace #32323200 #32323200 #5c5c5c
+    # }
+}
+
+# Input
+input * xkb_numlock enable
+
+include /etc/sway/config.d/*
+
